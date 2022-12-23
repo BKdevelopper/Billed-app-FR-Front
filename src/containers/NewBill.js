@@ -18,6 +18,16 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const filesType = ["image/jpeg", "image/jpg", "image/png"];
+    // prevent the input of a document that has an extension other than jpg, jpeg or png
+    if (!filesType.includes(file.type)) {
+        this.document.querySelector(`input[data-testid="file"]`).value = null;
+        this.document.querySelector(".error-file").textContent = "Que les fichiers .jpg, .jpeg, .png sont accepté";
+        return;
+    }
+    else {
+        this.document.querySelector(".error-file").textContent = "";
+    }
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
