@@ -86,6 +86,7 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    console.log(bill, bill.id) // debug show ticket 
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -131,7 +132,16 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
+    // if (this.counter === undefined || this.index !== index) this.counter = 0
+    // counts the number of open windows
+    let container = this.document.querySelectorAll("#status-bills-container" + index + " div"); 
+    console.log(this.counter)
+    if (this.counter === undefined || this.index !== index) {
+      if(container.length === 0) {
+          this.counter = 0;
+      }
+      else this.counter++;
+    }
     if (this.index === undefined || this.index !== index) this.index = index
     if (this.counter % 2 === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
@@ -144,8 +154,8 @@ export default class {
         .html("")
       this.counter ++
     }
-
-    bills.forEach(bill => {
+    //it filters according to the status and not all the status at the same time
+    filteredBills(bills, getStatus(this.index)).forEach(bill => {
       $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
     })
 
